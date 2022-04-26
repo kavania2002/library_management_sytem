@@ -88,3 +88,46 @@ CREATE TABLE `lms`.`book` (
     REFERENCES `lms`.`publisher` (`publisher_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+/* Date Table */
+CREATE TABLE `lms`.`dates` (
+  `user_id` INT NOT NULL,
+  `book_id` VARCHAR(100) NULL,
+  `periodicals_isbn` INT NULL,
+  `onlineres_issn` VARCHAR(100) NULL,
+  `issue_date` DATETIME NULL,
+  `due_date` DATETIME NULL,
+  `return_date` DATETIME NULL,
+  `fine` FLOAT NULL,
+  `reports_id` VARCHAR(100) NULL,
+  INDEX `date to book_idx` (`book_id` ASC) VISIBLE,
+  INDEX `date to periodicals_idx` (`periodicals_isbn` ASC) VISIBLE,
+  INDEX `date to onlineres_idx` (`onlineres_issn` ASC) VISIBLE,
+  INDEX `date to user_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `date to book`
+    FOREIGN KEY (`book_id`)
+    REFERENCES `lms`.`book` (`book_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `date to periodicals`
+    FOREIGN KEY (`periodicals_isbn`)
+    REFERENCES `lms`.`periodicals` (`isbn`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `date to onlineres`
+    FOREIGN KEY (`onlineres_issn`)
+    REFERENCES `lms`.`online_res` (`issn`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `date to user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `lms`.`reader` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+  CONSTRAINT `date to reports`
+    FOREIGN KEY (`reports_id`)
+    REFERENCES `lms`.`reports` (`reg_no`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+/*  */
