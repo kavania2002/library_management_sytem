@@ -1,30 +1,11 @@
-import dotenv from "dotenv";
-dotenv.config();
+const express = require("express");
 
-import express from "express";
-import mysql from "mysql";
+const app = express();
 
-// console.log(process.env.password);
+const readersR = require("./routes/books");
+app.use('/books', readersR);
 
-let connection = mysql.createConnection({
-    host: 'localhost',
-    user: process.env.user,
-    password: process.env.password,
-    database: process.env.db
+
+app.listen(3000, ()=> {
+    console.log("Server running at http://localhost:3000/");
 });
-
-connection.connect();
-
-// connection.query(`insert into sample values('Yagnesh',25)`, (error, results, fields) => {
-//     if (error) console.log(error);
-//     console.log(results);
-// });
-
-connection.query(`select * from sample`, (error, results, fields) => {
-    if (error) console.log(error);
-    // console.log(results);
-    const result = Object.values(JSON.parse(JSON.stringify(results)));
-    console.log(result);
-})
-
-connection.end();
