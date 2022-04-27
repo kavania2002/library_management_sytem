@@ -130,4 +130,16 @@ CREATE TABLE `lms`.`dates` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
-/*  */
+/* Admin Table which manages librarian and the Books  */
+CREATE TABLE `lms`.`admin` (
+  `librarian_id` INT NOT NULL,
+  `book_id` VARCHAR(100) NOT NULL,
+  `arrival_date` DATE NULL,
+  `copies` INT NULL,
+  PRIMARY KEY (`librarian_id`, `book_id`));
+
+/* ----------------------------  Changes in the Structure Table after creating  ---------------------------------------------------------- */
+ALTER TABLE `lms`.`book` 
+ADD COLUMN `copies` INT NULL AFTER `publisher_id`;
+
+

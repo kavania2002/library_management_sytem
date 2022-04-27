@@ -4,7 +4,7 @@ const router = express.Router();
 var connection = require("../connection");
 
 router.get("/all", (req, res) => {
-  connection.query("select * from book", (error, results, fields) => {
+  connection.query("select * from books", (error, results, fields) => {
     if (error) throw error;
     const result = resultConvert(results);
     res.send(resultConvert(results));
