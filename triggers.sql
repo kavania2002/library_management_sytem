@@ -161,5 +161,39 @@ CREATE DEFINER=`root`@`localhost` TRIGGER `check_email_update` BEFORE UPDATE ON 
 	end if;
 end
 
--- Price can't be negative
+
+
+
+
+-- Price can't be negative before insert and update table
+DELIMITER $$
+USE `lms`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `lms`.`check_price_insert` BEFORE INSERT ON `book` FOR EACH ROW
+BEGIN
+	declare p int;
+    declare error_msg varchar(100);
+    set p = (select new.price from `book`);
+    if p < 0 then
+		set error_msg = `Price can't be negative`;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
+	end if;
+END$$
+DELIMITER ;
+
+
+DROP TRIGGER IF EXISTS `lms`.`check_price_UPDATE`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `lms`.`check_price_UPDATE` BEFORE UPDATE ON `book` FOR EACH ROW
+BEGIN
+	declare p int;
+    declare error_msg varchar(100);
+    set p = (select new.price from `book`);
+    if p < 0 then
+		set error_msg = `Price can't be negative`;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
+	end if;
+END$$
+DELIMITER ;
 
