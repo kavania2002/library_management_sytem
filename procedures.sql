@@ -98,9 +98,42 @@ DELIMITER ;
 
 
 
+-- See past issues for specific users
+USE `lms`;
+DROP procedure IF EXISTS `issues_by_users`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `issues_by_users` (in id varchar(100))
+BEGIN
+	select `book`.title, `reader`.name, `dates`.issue_date, `dates`.due_date, `dates`.return_date from `book`, `reader`, `dates` where `dates`.book_id = `book`.book_id and `dates`.user_id = `reader`.user_id and `reader`.user_id = id;
+END$$
+
+DELIMITER ;
+
+
+
 
 
 -- Librarians can see per day logs
+
+USE `lms`;
+DROP procedure IF EXISTS `current_date_log`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `current_date_log` ()
+BEGIN
+	declare today date;
+    set today = (select curdate());
+	select `reader`.name, `book`.title, `book`.authors from `reader`, `book`, `dates` where `dates`.issue_date = today and `dates`.user_id = `reader`.user_id and `dates`.book_id = `book`.book_id;
+END$$
+
+DELIMITER ;
+
+
+
+
 
 -- New Arrivals
 

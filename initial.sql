@@ -143,3 +143,9 @@ ALTER TABLE `lms`.`book`
 ADD COLUMN `copies` INT NULL AFTER `publisher_id`;
 
 
+ALTER TABLE `lms`.`reader` 
+ADD COLUMN `gender` CHAR(1) NULL AFTER `contact_no`;
+
+
+ALTER TABLE `lms`.`librarian` 
+ADD COLUMN `gender` CHAR(1) NULL AFTER `name`;
