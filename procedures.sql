@@ -64,8 +64,41 @@ DELIMITER ;
 
 
 -- Check when's the due date
+USE `lms`;
+DROP procedure IF EXISTS `check_due_date`;
 
--- See past issues
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `check_due_date` (in id varchar(100))
+BEGIN
+	declare d_date datetime;
+    set d_date = (select `dates`.due_date from `dates`, `book` where `book`.book_id = `dates`.book_id and `dates`.book_id = id);
+    select d_date;
+END$$
+
+DELIMITER ;
+
+
+
+
+
+
+-- See past all of all issues of all users
+USE `lms`;
+DROP procedure IF EXISTS `check_past_issues`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `check_past_issues` ()
+BEGIN
+	select `reader`.name, `book`.title, `dates`.issue_date, `dates`.return_date, `dates`.due_date from `reader`, `book`, `dates` where `reader`.user_id = `dates`.user_id and `book`.book_id = `dates`.book_id;
+END$$
+
+DELIMITER ;
+
+
+
+
 
 -- Librarians can see per day logs
 
