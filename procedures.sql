@@ -21,6 +21,25 @@ DELIMITER ;
 
 
 -- If book is available or not
+USE `lms`;
+DROP procedure IF EXISTS `check_book_availability`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `check_book_availability` (in id varchar(100))
+
+BEGIN
+	declare no_of_copies int;
+    set no_of_copies = (select copies from `book` where book_id = id);
+    if no_of_copies = 0 then
+		select false;
+	else
+		select true;
+	end if;
+END$$
+
+DELIMITER ;
+
 
 
 
