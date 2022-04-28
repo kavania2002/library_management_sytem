@@ -45,6 +45,23 @@ DELIMITER ;
 
 
 -- Automatically add in remove/books via 
+USE `lms`;
+DROP procedure IF EXISTS `add_books`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `add_books` (in b_book_id varchar(100), in b_isbn varchar(45), in b_title varchar(45), in b_price float, in b_genre varchar(45), in b_edition float, in b_authors varchar(100), in b_language varchar(45), in b_publisher_id int, in b_copies int)
+BEGIN
+	insert into `add_books`(book_id, isbn, title, price, genre, edition, authors, language, publisher_id, copies) values(b_book_id, b_isbn, b_title, b_price, b_genre, b_edition, b_authors, b_language, b_publisher_id, b_copies);
+END$$
+
+DELIMITER ;
+
+
+
+
+
+
 
 -- Check when's the due date
 
