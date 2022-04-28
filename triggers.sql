@@ -20,24 +20,43 @@ CREATE DEFINER=`root`@`localhost` TRIGGER `set_fine_duedate` BEFORE UPDATE ON `d
 END$$
 DELIMITER ;
 
+
+
+
+
+
 -- Not more than 1 book in dates table
 DROP TRIGGER IF EXISTS `lms`.`check_if_issued`;
 
 DELIMITER $$
 USE `lms`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `lms`.`check_if_issued` BEFORE INSERT ON `dates` FOR EACH ROW
-BEGIN
+CREATE DEFINER=`root`@`localhost` TRIGGER `check_if_issued` BEFORE INSERT ON `dates` FOR EACH ROW BEGIN
 	declare rt datetime;
 	declare error_msg varchar(200);
-	set rt = (select return_date from `table` where new.book_id = book_id);
-	if rt is NOT NULL then
+	set rt = (select return_date from `dates` where new.user_id = user_id);
+	if rt is NULL then
 		set error_msg = `One student can issue only one book at a time`;
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
 	end if;	
 END$$
 DELIMITER ;
 
+
+
+
+
 -- No of copies deduce/increase
+DROP TRIGGER IF EXISTS `lms`.`maintain_count_copies`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE DEFINER=`root`@`localhost` TRIGGER `maintain_count_copies` AFTER INSERT ON `dates` FOR EACH ROW begin
+	declare no_of_copies int;    
+	set no_of_copies = (select copies from `book` where new.book_id = `book`.book_id);    
+	update `book` set copies = no_of_copies - 1;
+END$$
+DELIMITER ;
+
 
 
 
@@ -59,7 +78,13 @@ END$$
 DELIMITER ;
 
 
+
+
+
+
 -- Insert into publisher table while adding new books
+
+
 
 
 -- Error checking in contact no
