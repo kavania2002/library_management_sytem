@@ -45,31 +45,17 @@ DELIMITER ;
 
 
 
--- No of copies deduce/increase
-DROP TRIGGER IF EXISTS `lms`.`maintain_count_copies`;
-
-DELIMITER $$
-USE `lms`$$
-CREATE DEFINER=`root`@`localhost` TRIGGER `maintain_count_copies` AFTER INSERT ON `dates` FOR EACH ROW begin
-	declare no_of_copies int;    
-	set no_of_copies = (select copies from `book` where new.book_id = `book`.book_id);    
-	update `book` set copies = no_of_copies - 1;
-END$$
-DELIMITER ;
-
-
-
-
 -- Throwing error if all the books are issued
 DROP TRIGGER IF EXISTS `lms`.`check_copies`;
 
 DELIMITER $$
 USE `lms`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `lms`.`check_copies` AFTER INSERT ON `dates` FOR EACH ROW
-BEGIN
+CREATE DEFINER=`root`@`localhost` TRIGGER `check_copies` AFTER INSERT ON `dates` FOR EACH ROW BEGIN
 	declare no_of_copies int;
     declare error_msg varchar(200);
-    set no_of_copies = (select `book`.copies from `book` where `book`.book_id = new.book_id);
+    declare book_name varchar(45);
+    set book_name = (select `book`.title from `book` where `book`.book_id = new.book_id);
+    set no_of_copies = (select `admin`.copies from `admin` where `book`.title = book_name);
     if no_of_copies=0 then
 		set error_msg = `The book is not available right now`;
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
@@ -77,6 +63,24 @@ BEGIN
 END$$
 DELIMITER ;
 
+
+
+
+
+
+-- No of copies deduce/increase
+DROP TRIGGER IF EXISTS `lms`.`maintain_count_copies`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE DEFINER=`root`@`localhost` TRIGGER `maintain_count_copies` AFTER INSERT ON `dates` FOR EACH ROW begin
+	declare no_of_copies int;    
+    declare book_name varchar(45);
+    set book_name = (select `book`.title from `book` where `book`.book_id = new.book_id);
+    set no_of_copies = (select copies from `admin` where `admin`.title = book_name);    
+    update `admin` set copies = no_of_copies - 1 where `admin`.title = book_name;
+END$$
+DELIMITER ;
 
 
 
@@ -197,3 +201,7 @@ BEGIN
 END$$
 DELIMITER ;
 
+
+
+
+/* Insert no of copies into books table via admin table */
