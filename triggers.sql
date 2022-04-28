@@ -153,10 +153,12 @@ CREATE DEFINER=`root`@`localhost` TRIGGER `check_email_update` BEFORE UPDATE ON 
 	declare email_id varchar(100);
 	declare error_msg varchar(100);
 	set email_id = (select new.email from `reader`);
-	if email_id regexp '^[^@]+@[^@]+\.[^@]{2,}$' then
-		set error_msg = `Please enter a valid email address`;
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
-	end if;	
+	if email_id is NOT NULL then
+		if email_id regexp '^[^@]+@[^@]+\.[^@]{2,}$' then
+			set error_msg = `Please enter a valid email address`;
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
+		end if;	
+	end if;
 end
 
 -- Price can't be negative
