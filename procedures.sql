@@ -157,9 +157,25 @@ DELIMITER ;
 
 
 -- Update personal info
+USE `lms`;
+DROP procedure IF EXISTS `update_user_info`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `update_user_info` (in r_user_id int, in r_name varchar(100), in r_email varchar(100), in r_address longtext, in r_contact_no varchar(10))
+BEGIN
+	update `reader` set r_name = name, r_email = email, r_address = address, r_contact_no = contact_no where `reader`.user_id = r_user_id;
+END$$
+
+DELIMITER ;
+
+
+
 
 
 -- Librarian adding new users
+
+
 
 -- Find language specific newspaper
 
