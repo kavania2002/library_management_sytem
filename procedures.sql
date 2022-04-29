@@ -136,6 +136,21 @@ DELIMITER ;
 
 
 -- New Arrivals
+USE `lms`;
+DROP procedure IF EXISTS `find_new_arrivals`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `find_new_arrivals` ()
+BEGIN
+	declare today, prevDay date;
+    set today = curdate();
+    set prevDay = (select date_sub(today, interval 7 day));
+    select `admin`.title, `book`.authors, `book`.language from `admin`, `book` where (`admin`.published_date between prevDay and today) and `admin`.title = `book`.title;
+END$$
+
+DELIMITER ;
+
 
 
 

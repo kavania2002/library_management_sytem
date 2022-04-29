@@ -160,5 +160,10 @@ ADD PRIMARY KEY (`librarian_id`, `book_id`, `publisher_id`);
 ALTER TABLE `lms`.`admin` 
 CHANGE COLUMN `book_id` `title` VARCHAR(100) NOT NULL ;
 
+
 ALTER TABLE `lms`.`book` 
 DROP COLUMN `copies`;
+
+
+ALTER TABLE `lms`.`admin` 
+ADD COLUMN `published_date` DATE NULL AFTER `publisher_id`;
