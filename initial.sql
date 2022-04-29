@@ -167,3 +167,7 @@ DROP COLUMN `copies`;
 
 ALTER TABLE `lms`.`admin` 
 ADD COLUMN `published_date` DATE NULL AFTER `publisher_id`;
+
+
+ALTER TABLE `lms`.`reader` 
+CHANGE COLUMN `contact_no` `contact_no` VARCHAR(10) NULL DEFAULT NULL ;

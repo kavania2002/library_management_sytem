@@ -92,21 +92,18 @@ DROP TRIGGER IF EXISTS `lms`.`check_number`;
 
 DELIMITER $$
 USE `lms`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `lms`.`check_number` BEFORE INSERT ON `reader` FOR EACH ROW
-BEGIN
-	declare contact, cnt int;
-    declare error_msg varchar(100);
-    set cnt = 0;
-	set contact = (select new.`contact_no` from `reader`);
-    while contact > 0 do
-		set cnt = cnt + 1;
-        set contact = contact/10;
-    end while;
+CREATE DEFINER=`root`@`localhost` TRIGGER `check_number` BEFORE INSERT ON `reader` FOR EACH ROW BEGIN
+  declare cnt int;
+  declare contact varchar(10);
+  declare error_msg varchar(100);
+  set cnt = 0;
+  set contact = (select new.`contact_no` from `reader`);
+  set cnt = (select length(contact));
     
-    if cnt <> 10 then
-		set error_msg = `Please insert a valid nunber`;
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
-    end if;    
+  if cnt <> 10 then
+    set error_msg = `Please insert a valid nunber`;
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
+  end if;    
 END$$
 DELIMITER ;
 
@@ -120,21 +117,18 @@ DELIMITER $$
 USE `lms`$$
 CREATE DEFINER = CURRENT_USER TRIGGER `lms`.`check_number_update` BEFORE UPDATE ON `reader` FOR EACH ROW
 BEGIN
-	declare contact, cnt int;
-    declare error_msg varchar(100);
-    set cnt = 0;
-    set contact = (select new.contact_no from `reader`);
-    if contact is NOT NULL then
-		while cnt > 0 do
-			set cnt = cnt + 1;
-            set contact = contact/10;
-        end while;
-        
-        if cnt <> 10 then
-			set error_msg = `Please enter a valid contact number`;
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
-		end if;
-	end if;
+  declare cnt int;
+  declare contact varchar(10);
+  declare error_msg varchar(100);
+  set cnt = 0;
+  set contact = (select new.`contact_no` from `reader`);
+  set cnt = (select length(contact));
+    
+  if cnt <> 10 then
+    set error_msg = `Please insert a valid nunber`;
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
+  end if;    
+
 END$$
 DELIMITER ;
 
@@ -200,8 +194,3 @@ BEGIN
 	end if;
 END$$
 DELIMITER ;
-
-
-
-
-/* Insert no of copies into books table via admin table */

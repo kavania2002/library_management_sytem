@@ -158,6 +158,7 @@ DELIMITER ;
 
 -- Update personal info
 
+
 -- Librarian adding new users
 
 -- Find language specific newspaper
