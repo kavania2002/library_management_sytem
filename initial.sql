@@ -171,3 +171,13 @@ ADD COLUMN `published_date` DATE NULL AFTER `publisher_id`;
 
 ALTER TABLE `lms`.`reader` 
 CHANGE COLUMN `contact_no` `contact_no` VARCHAR(10) NULL DEFAULT NULL ;
+
+
+ALTER TABLE `lms`.`admin` 
+CHANGE COLUMN `title` `title` VARCHAR(45) NOT NULL ;
+ALTER TABLE `lms`.`admin` 
+ADD CONSTRAINT `admin to librarian`
+  FOREIGN KEY (`librarian_id`)
+  REFERENCES `lms`.`librarian` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
