@@ -98,15 +98,84 @@ DELIMITER ;
 
 
 
+-- See past issues for specific users
+USE `lms`;
+DROP procedure IF EXISTS `issues_by_users`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `issues_by_users` (in id varchar(100))
+BEGIN
+	select `book`.title, `reader`.name, `dates`.issue_date, `dates`.due_date, `dates`.return_date from `book`, `reader`, `dates` where `dates`.book_id = `book`.book_id and `dates`.user_id = `reader`.user_id and `reader`.user_id = id;
+END$$
+
+DELIMITER ;
+
+
+
 
 
 -- Librarians can see per day logs
 
+USE `lms`;
+DROP procedure IF EXISTS `current_date_log`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `current_date_log` ()
+BEGIN
+	declare today date;
+    set today = (select curdate());
+	select `reader`.name, `book`.title, `book`.authors from `reader`, `book`, `dates` where `dates`.issue_date = today and `dates`.user_id = `reader`.user_id and `dates`.book_id = `book`.book_id;
+END$$
+
+DELIMITER ;
+
+
+
+
+
 -- New Arrivals
+USE `lms`;
+DROP procedure IF EXISTS `find_new_arrivals`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `find_new_arrivals` ()
+BEGIN
+	declare today, prevDay date;
+    set today = curdate();
+    set prevDay = (select date_sub(today, interval 7 day));
+    select `admin`.title, `book`.authors, `book`.language from `admin`, `book` where (`admin`.published_date between prevDay and today) and `admin`.title = `book`.title;
+END$$
+
+DELIMITER ;
+
+
+
+
+
 
 -- Update personal info
+USE `lms`;
+DROP procedure IF EXISTS `update_user_info`;
+
+DELIMITER $$
+USE `lms`$$
+CREATE PROCEDURE `update_user_info` (in r_user_id int, in r_name varchar(100), in r_email varchar(100), in r_address longtext, in r_contact_no varchar(10))
+BEGIN
+	update `reader` set r_name = name, r_email = email, r_address = address, r_contact_no = contact_no where `reader`.user_id = r_user_id;
+END$$
+
+DELIMITER ;
+
+
+
+
 
 -- Librarian adding new users
+
+
 
 -- Find language specific newspaper
 

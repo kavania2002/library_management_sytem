@@ -143,3 +143,31 @@ ALTER TABLE `lms`.`book`
 ADD COLUMN `copies` INT NULL AFTER `publisher_id`;
 
 
+ALTER TABLE `lms`.`reader` 
+ADD COLUMN `gender` CHAR(1) NULL AFTER `contact_no`;
+
+
+ALTER TABLE `lms`.`librarian` 
+ADD COLUMN `gender` CHAR(1) NULL AFTER `name`;
+
+
+ALTER TABLE `lms`.`admin` 
+ADD COLUMN `publisher_id` INT NOT NULL AFTER `copies`,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`librarian_id`, `book_id`, `publisher_id`);
+
+
+ALTER TABLE `lms`.`admin` 
+CHANGE COLUMN `book_id` `title` VARCHAR(100) NOT NULL ;
+
+
+ALTER TABLE `lms`.`book` 
+DROP COLUMN `copies`;
+
+
+ALTER TABLE `lms`.`admin` 
+ADD COLUMN `published_date` DATE NULL AFTER `publisher_id`;
+
+
+ALTER TABLE `lms`.`reader` 
+CHANGE COLUMN `contact_no` `contact_no` VARCHAR(10) NULL DEFAULT NULL ;
