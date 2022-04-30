@@ -26,7 +26,13 @@ router.get("/available/:title", (req, res) => {
   });
 });
 
-router.get()
+router.get("/new", (req, res) => {
+  connection.query("call find_new_arrivals()", (error, results, fields) => {
+    if (error) console.log(error);
+    const result = resultConvert(results);
+    res.send(result);
+  });
+});
 
 function resultConvert(input) {
   const result = Object.values(JSON.parse(JSON.stringify(input)));
