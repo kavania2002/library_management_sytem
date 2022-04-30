@@ -104,7 +104,7 @@ DROP procedure IF EXISTS `issues_by_users`;
 
 DELIMITER $$
 USE `lms`$$
-CREATE PROCEDURE `issues_by_users` (in id varchar(100))
+CREATE PROCEDURE `issues_by_users` (in id int)
 BEGIN
 	select `book`.title, `reader`.name, `dates`.issue_date, `dates`.due_date, `dates`.return_date from `book`, `reader`, `dates` where `dates`.book_id = `book`.book_id and `dates`.user_id = `reader`.user_id and `reader`.user_id = id;
 END$$
@@ -179,6 +179,10 @@ DELIMITER ;
 
 -- Find language specific newspaper
 
--- Find genre specific online res
+
+
+-- Find genre specific online res/
+
+
 
 -- Adding new Librarian
