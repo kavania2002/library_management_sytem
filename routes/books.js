@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 var connection = require("../connection");
 
 router.get("/all", (req, res) => {
@@ -26,6 +25,8 @@ router.get("/available/:title", (req, res) => {
     res.send(result);
   });
 });
+
+router.get()
 
 function resultConvert(input) {
   const result = Object.values(JSON.parse(JSON.stringify(input)));
