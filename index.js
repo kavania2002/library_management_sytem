@@ -13,6 +13,6 @@ app.use('/readers', readersR);
 const datesR = require("./routes/dates");
 app.use('/dates', datesR);
 
-app.listen(3000, ()=> {
-    console.log("Server running at http://localhost:3000/");
+app.listen(8000, ()=> {
+    console.log("Server running at http://localhost:8000/");
 });
