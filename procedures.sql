@@ -11,7 +11,7 @@ BEGIN
     set title = concat('%', book_title);
     set title = concat(title, '%');
     select title;
-	select * from `book` where `book`.book_id like title;
+	select * from `book` where `book`.title like title;
 END$$
 
 DELIMITER ;
@@ -26,11 +26,11 @@ DROP procedure IF EXISTS `check_book_availability`;
 
 DELIMITER $$
 USE `lms`$$
-CREATE PROCEDURE `check_book_availability` (in id varchar(100))
+CREATE PROCEDURE `check_book_availability` (in titl varchar(45))
 
 BEGIN
 	declare no_of_copies int;
-    set no_of_copies = (select copies from `book` where book_id = id);
+    set no_of_copies = (select copies from `admin` where `admin`.title = titl);
     if no_of_copies = 0 then
 		select false;
 	else
@@ -39,9 +39,6 @@ BEGIN
 END$$
 
 DELIMITER ;
-
-
-
 
 
 -- Automatically add in remove/books via 
@@ -69,7 +66,7 @@ DROP procedure IF EXISTS `check_due_date`;
 
 DELIMITER $$
 USE `lms`$$
-CREATE PROCEDURE `check_due_date` (in id varchar(100))
+CREATE PROCEDURE `check_due_date` (in id int)
 BEGIN
 	declare d_date datetime;
     set d_date = (select `dates`.due_date from `dates`, `book` where `book`.book_id = `dates`.book_id and `dates`.book_id = id);

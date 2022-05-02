@@ -10,10 +10,10 @@ router.get("/all", (req, res) => {
   });
 });
 
-router.get("/:title", (req, res) => {
-  connection.query("call search_book_title(?)", req.params.title, (error, results, fields) => {
+router.get("/search/:title", (req, res) => {
+  connection.query("call search_books_title(?)", req.params.title, (error, results, fields) => {
     if (error) console.log(error);
-    const result = resultConvert(results);
+    const result = resultConvert(results[1]);
     res.send(result);
   });
 });

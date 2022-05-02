@@ -13,7 +13,7 @@ router.get("/all", (req, res) => {
 
 router.get("/check_due/:id", (req, res) => {
 
-  connection.query("call (?)", req.params.id, (error, results, fields) => {
+  connection.query("call check_due_date(?)", req.params.id, (error, results, fields) => {
     if (error) console.log(error);
     const result = resultConvert(results);
     res.send(result);
